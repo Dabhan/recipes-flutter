@@ -26,6 +26,11 @@ ThemeData lightTheme() {
     textTheme: _buildTextTheme(base.textTheme),
     indicatorColor: Colors.purple,
     accentColor: Colors.purple,
+    backgroundColor: Colors.white,
+     tabBarTheme: base.tabBarTheme.copyWith(
+      labelColor: const Color(0xFF807A6B),
+      unselectedLabelColor: const Color(0xFFCCC5AF),
+    )
   );
 }
 
@@ -54,7 +59,12 @@ ThemeData darkTheme() {
   return base.copyWith(
     textTheme: _buildTextTheme(base.textTheme),
     indicatorColor: Colors.white,
-    accentColor: Colors.purple
+    accentColor: Colors.purple,
+    backgroundColor: Colors.black,
+     tabBarTheme: base.tabBarTheme.copyWith(
+      labelColor: const Color(0xFF807A6B),
+      unselectedLabelColor: const Color(0xFFCCC5AF),
+    )
   );
 }
 

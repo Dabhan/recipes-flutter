@@ -77,7 +77,7 @@ List<Widget> _recipeTabs(double _iconSize) {
     // The argument recipeType is set
     if (recipeType != null) {
       stream = collectionReference
-          .where("type", isEqualTo: recipeType.index)
+          .where("type", isEqualTo: recipeType.typeName)
           .snapshots();
     } else {
       // Use snapshots of all recipes if recipeType has not been passed

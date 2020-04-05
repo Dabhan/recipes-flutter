@@ -1,21 +1,23 @@
 import 'package:duration/duration.dart';
 import 'package:flutter/material.dart';
+import 'package:recipes/app.dart';
 
 enum RecipeType {
   curry,
   slowcooker,
   chicken,
-  porkandlamb,
   beef,
   fish,
-  bread,
+  vegetarian,
+  porkandlamb,
+  dough,
+  sides,
   desserts,
 }
 
 extension RecipeTypeExtension on RecipeType {
   String get name {
     switch (this) {
-      
       case RecipeType.curry:
         return "Curry";
         break;
@@ -34,17 +36,26 @@ extension RecipeTypeExtension on RecipeType {
       case RecipeType.fish:
         return "Fish";
         break;
-      case RecipeType.bread:
-        return "Bread";
+      case RecipeType.dough:
+        return "Dough";
         break;
       case RecipeType.desserts:
         return "Desserts";
         break;
+      case RecipeType.vegetarian:
+        return "Vegetarian";
+        break;
+      case RecipeType.sides:
+        return "Sides";
     }
   }
-IconData get icon {
+
+  String get typeName {
+    return this.toString().substring("RecipeType.".length);
+  }
+
+  IconData get icon {
     switch (this) {
-      
       case RecipeType.curry:
         return Icons.restaurant;
         break;
@@ -63,15 +74,19 @@ IconData get icon {
       case RecipeType.fish:
         return Icons.restaurant;
         break;
-      case RecipeType.bread:
+      case RecipeType.dough:
         return Icons.restaurant;
         break;
       case RecipeType.desserts:
         return Icons.restaurant;
         break;
+      case RecipeType.vegetarian:
+        return Icons.restaurant;
+        break;
+      case RecipeType.sides:
+        return Icons.restaurant;
     }
   }
-
 }
 
 class Recipe {
@@ -98,7 +113,7 @@ class Recipe {
   Recipe.fromMap(Map<String, dynamic> data, String id)
       : this(
           id: id,
-          type: RecipeType.values[data['type']],
+          type: typeFromString(data['type']),
           name: data['name'],
           duration: Duration(minutes: data['duration']),
           ingredients: new List<String>.from(data['ingredients']),
@@ -106,4 +121,38 @@ class Recipe {
           imageURL: data['image'],
         );
 
+  static RecipeType typeFromString(String typeString) {
+    switch (typeString) {
+      case "curry":
+        return RecipeType.curry;
+
+      case "slowcooker":
+        return RecipeType.slowcooker;
+
+      case "chicken":
+        return RecipeType.chicken;
+
+      case "beef":
+        return RecipeType.beef;
+
+      case "fish":
+        return RecipeType.fish;
+
+      case "vegetarian":
+        return RecipeType.vegetarian;
+
+      case "porkandlamb":
+        return RecipeType.porkandlamb;
+
+      case "dough":
+        return RecipeType.dough;
+
+      case "desserts":
+        return RecipeType.desserts;
+      case "sides":
+        return RecipeType.sides;
+      default:
+        throw Exception("unknown recipe type");
+    }
+  }
 }
