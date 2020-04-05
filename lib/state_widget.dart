@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -62,9 +63,11 @@ class _StateWidgetState extends State<StateWidget> {
       googleAccount = await googleSignIn.signIn();
     }
     FirebaseUser firebaseUser = await signIntoFirebase(googleAccount);
+    state.user = firebaseUser; // new
+    List<String> favourites = await getFavourites(); // new
     setState(() {
       state.isLoading = false;
-      state.user = firebaseUser;
+      state.favourites = favourites; // new
     });
   }
 
@@ -74,6 +77,20 @@ class _StateWidgetState extends State<StateWidget> {
     setState(() {
       state.user = null;
     });
+  }
+
+  Future<List<String>> getFavourites() async {
+    DocumentSnapshot querySnapshot = await Firestore.instance
+        .collection('users')
+        .document(state.user.uid)
+        .get();
+    if (querySnapshot.exists &&
+        querySnapshot.data.containsKey('favorites') &&
+        querySnapshot.data['favorites'] is List) {
+      // Create a new List<String> from List<dynamic>
+      return List<String>.from(querySnapshot.data['favorites']);
+    }
+    return [];
   }
 
   @override
@@ -99,3 +116,7 @@ class _StateDataWidget extends InheritedWidget {
   @override
   bool updateShouldNotify(_StateDataWidget old) => true;
 }
+
+
+
+
