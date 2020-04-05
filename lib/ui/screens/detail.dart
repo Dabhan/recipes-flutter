@@ -55,6 +55,9 @@ class _DetailScreenState extends State<DetailScreen>
   Widget build(BuildContext context) {
     appState = StateWidget.of(context).state;
 
+    var shortestSide = MediaQuery.of(context).size.shortestSide;
+    final bool useMobileLayout = shortestSide < 600;
+
     return Scaffold(
       body: NestedScrollView(
         controller: _scrollController,
@@ -72,7 +75,7 @@ class _DetailScreenState extends State<DetailScreen>
                   ],
                 ),
               ),
-              expandedHeight: 340.0,
+              expandedHeight: useMobileLayout ? 300.0 : 360.0,
               pinned: true,
               floating: true,
               elevation: 2.0,
