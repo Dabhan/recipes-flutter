@@ -75,7 +75,7 @@ class _DetailScreenState extends State<DetailScreen>
                   ],
                 ),
               ),
-              expandedHeight: useMobileLayout ? 300.0 : 360.0,
+              expandedHeight: useMobileLayout ? 320.0 : 360.0,
               pinned: true,
               floating: true,
               elevation: 2.0,
