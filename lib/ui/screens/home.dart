@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:recipes/model/recipe.dart';
 import 'package:recipes/ui/widgets/recipe_card.dart';
+import 'package:recipes/ui/widgets/settings_button.dart';
 import 'package:recipes/utils/store.dart';
 import 'package:recipes/model/state.dart';
 import 'package:recipes/state_widget.dart';
@@ -121,7 +122,23 @@ List<Widget> _recipeTabs(double _iconSize) {
       children: [
        ..._buildRecipePages(),
         _buildRecipes(ids: appState.favourites),
-        Center(child: Icon(Icons.settings)),
+        _buildSettings(),
+      ],
+    );
+  }
+
+  Column _buildSettings() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        SettingsButton(
+          Icons.exit_to_app,
+          "Log out",
+          appState.user.displayName,
+          () async {
+            await StateWidget.of(context).signOut();
+          },
+        ),
       ],
     );
   }

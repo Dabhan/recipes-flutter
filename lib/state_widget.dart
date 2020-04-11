@@ -79,6 +79,8 @@ class _StateWidgetState extends State<StateWidget> {
     });
   }
 
+  
+
   Future<List<String>> getFavourites() async {
     DocumentSnapshot querySnapshot = await Firestore.instance
         .collection('users')
