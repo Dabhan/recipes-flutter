@@ -25,7 +25,8 @@ Future<FirebaseUser> signIntoFirebase(
     accessToken: googleAuth.accessToken,
     idToken: googleAuth.idToken,
   );
-  return await _auth.signInWithCredential(credential);
+  var result = await _auth.signInWithCredential(credential);
+  return result.user;
 }
 
 Future<void> signOutFirebase (GoogleSignIn googleSignIn) async{
