@@ -24,6 +24,7 @@ class HomeScreenState extends State<HomeScreen> {
       length: RecipeType.values.length + 2,
       child: Scaffold(
         appBar: AppBar(
+          centerTitle: true,
           title: Text("Recipes"),
             elevation: 2.0,
             bottom: TabBar(
