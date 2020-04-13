@@ -47,7 +47,7 @@ class _StateWidgetState extends State<StateWidget> {
 
   Future<Null> initUser() async {
     googleAccount = await getSignedInAccount(googleSignIn);
-
+    
     if (googleAccount == null) {
       setState(() {
         state.isLoading = false;

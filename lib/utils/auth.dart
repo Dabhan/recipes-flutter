@@ -5,12 +5,20 @@ Future<GoogleSignInAccount> getSignedInAccount(
     GoogleSignIn googleSignIn) async {
   // Is the user already signed in?
   GoogleSignInAccount account = googleSignIn.currentUser;
+  
   // Try to sign in the previous user:
+  if (account != null && account.id == null) {
+    await googleSignIn.disconnect();
+    account = null;
+  }
   if (account == null) {
     try {
-      account = await googleSignIn.signInSilently();
+      account = await googleSignIn.signInSilently(suppressErrors: false);
+      if (account != null && account.id == null) {
+        await googleSignIn.disconnect();
+        account = null;
+      }
     } catch (exception) {
-      print(exception);
     }
   }
   return account;
