@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:recipes/model/recipe.dart';
 import 'package:recipes/ui/widgets/recipe_card.dart';
 import 'package:recipes/ui/widgets/settings_button.dart';
@@ -26,16 +27,16 @@ class HomeScreenState extends State<HomeScreen> {
         appBar: AppBar(
           centerTitle: true,
           title: Text("Recipes"),
-            elevation: 2.0,
-            bottom: TabBar(
-              isScrollable: true,
-              labelColor: Theme.of(context).indicatorColor,
-              tabs: [
-                ..._recipeTabs(_iconSize),
-                Tab(icon: Icon(Icons.favorite, size: _iconSize)),
-                Tab(icon: Icon(Icons.settings, size: _iconSize)),
-              ],
-            ),
+          elevation: 2.0,
+          bottom: TabBar(
+            isScrollable: true,
+            labelColor: Theme.of(context).indicatorColor,
+            tabs: [
+              ..._recipeTabs(_iconSize),
+              Tab(icon: Icon(Icons.favorite, size: _iconSize)),
+              Tab(icon: Icon(Icons.settings, size: _iconSize)),
+            ],
+          ),
         ),
         body: Padding(
           padding: EdgeInsets.all(5.0),
@@ -45,12 +46,13 @@ class HomeScreenState extends State<HomeScreen> {
     );
   }
 
-List<Widget> _recipeTabs(double _iconSize) {
-  return RecipeType.values.map((type){
-    return Tab(text: type.name,);
-  }).toList();
-}
-
+  List<Widget> _recipeTabs(double _iconSize) {
+    return RecipeType.values.map((type) {
+      return Tab(
+        text: type.name,
+      );
+    }).toList();
+  }
 
   Widget _buildContent() {
     if (appState.isLoading) {
@@ -85,6 +87,8 @@ List<Widget> _recipeTabs(double _iconSize) {
       // Use snapshots of all recipes if recipeType has not been passed
       stream = collectionReference.snapshots();
     }
+    var shortestSide = MediaQuery.of(context).size.width;
+    final bool useMobileLayout = shortestSide < 600;
     return Padding(
       // Padding before and after the list view:
       padding: const EdgeInsets.symmetric(vertical: 5.0),
@@ -96,11 +100,10 @@ List<Widget> _recipeTabs(double _iconSize) {
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (!snapshot.hasData) return _buildLoadingIndicator();
-                return new ListView(
-                  children: snapshot.data.documents
-                      // Check if the argument ids contains document ID if ids has been passed:
-                      .where((d) => ids == null || ids.contains(d.documentID))
-                      .map((document) {
+                return new StaggeredGridView.countBuilder(
+                  crossAxisCount: useMobileLayout ? 1 : 2,
+                  itemBuilder: (context, index) {
+                    var document = snapshot.data.documents[index];
                     return new RecipeCard(
                       recipe:
                           Recipe.fromMap(document.data, document.documentID),
@@ -108,7 +111,10 @@ List<Widget> _recipeTabs(double _iconSize) {
                           appState.favourites.contains(document.documentID),
                       onFavoriteButtonPressed: _handleFavoritesListChanged,
                     );
-                  }).toList(),
+                  },
+                  itemCount: snapshot.data.documents.length,
+                  staggeredTileBuilder: (int index) =>
+                      new StaggeredTile.fit(1),
                 );
               },
             ),
@@ -121,7 +127,7 @@ List<Widget> _recipeTabs(double _iconSize) {
   TabBarView _buildTabsContent() {
     return TabBarView(
       children: [
-       ..._buildRecipePages(),
+        ..._buildRecipePages(),
         _buildRecipes(ids: appState.favourites),
         _buildSettings(),
       ],
@@ -145,7 +151,7 @@ List<Widget> _recipeTabs(double _iconSize) {
   }
 
   List<Widget> _buildRecipePages() {
-    return RecipeType.values.map((type){
+    return RecipeType.values.map((type) {
       return _buildRecipes(recipeType: type);
     }).toList();
   }
@@ -171,5 +177,4 @@ List<Widget> _recipeTabs(double _iconSize) {
     appState = StateWidget.of(context).state;
     return _buildContent();
   }
-
 }

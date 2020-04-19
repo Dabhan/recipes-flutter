@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 import 'package:recipes/model/recipe.dart';
@@ -27,8 +28,9 @@ class RecipeTitle extends StatelessWidget {
             children: [
               Icon(Icons.timer, size: 20.0),
               SizedBox(width: 5.0),
-              Text(
+              AutoSizeText(
                 recipe.getDurationString,
+                maxLines: 1,
                 style: Theme.of(context).textTheme.caption,
               ),
             ],

@@ -5,15 +5,23 @@ import 'package:transparent_image/transparent_image.dart';
 
 class RecipeImage extends StatelessWidget {
   final String imageURL;
+  final bool detail;
 
-  RecipeImage(this.imageURL);
+  RecipeImage(this.imageURL, {this.detail = false});
+
+  static double aspectRatio(BuildContext context, bool detail) {
+    var shortestSide = MediaQuery.of(context).size.width;
+    final bool useMobileLayout = shortestSide < 600;
+    
+    return 16.0 / (useMobileLayout ? 9.0 : detail ? 4.0 : 9.0);
+  }
 
   @override
   Widget build(BuildContext context) {
-    var shortestSide = MediaQuery.of(context).size.shortestSide;
-    final bool useMobileLayout = shortestSide < 600;
+    
+    final double ratio = RecipeImage.aspectRatio(context, detail);
     return AspectRatio(
-        aspectRatio: 16.0 / (useMobileLayout ? 9.0 : 4.0),
+        aspectRatio: ratio,
         child: Hero(
           tag: imageURL,
           child: kIsWeb

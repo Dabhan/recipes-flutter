@@ -55,8 +55,11 @@ class _DetailScreenState extends State<DetailScreen>
   Widget build(BuildContext context) {
     appState = StateWidget.of(context).state;
 
-    var shortestSide = MediaQuery.of(context).size.shortestSide;
-    final bool useMobileLayout = shortestSide < 600;
+    var shortestSide = MediaQuery.of(context).size.width;
+
+
+    final imageHeight = shortestSide * (1 / RecipeImage.aspectRatio(context, true));
+    final textHeight = 120.0;
 
     return Scaffold(
       body: NestedScrollView(
@@ -70,12 +73,12 @@ class _DetailScreenState extends State<DetailScreen>
                 background: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    RecipeImage(widget.recipe.imageURL),
+                    RecipeImage(widget.recipe.imageURL, detail: true),
                     RecipeTitle(widget.recipe, 25.0),
                   ],
                 ),
               ),
-              expandedHeight: useMobileLayout ? 320.0 : 360.0,
+              expandedHeight: imageHeight + textHeight,
               pinned: true,
               floating: true,
               elevation: 2.0,
