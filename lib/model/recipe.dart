@@ -155,6 +155,8 @@ class Recipe {
         return RecipeType.desserts;
       case "sides":
         return RecipeType.sides;
+      case "drinks":
+        return RecipeType.drinks;
       default:
         throw Exception("unknown recipe type");
     }
