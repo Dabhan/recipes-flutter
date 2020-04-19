@@ -56,10 +56,10 @@ class _DetailScreenState extends State<DetailScreen>
     appState = StateWidget.of(context).state;
 
     var shortestSide = MediaQuery.of(context).size.width;
-
+    var safePadding = MediaQuery.of(context).padding.top;
 
     final imageHeight = shortestSide * (1 / RecipeImage.aspectRatio(context, true));
-    final textHeight = 120.0;
+    final textHeight = 130.0;
 
     return Scaffold(
       body: NestedScrollView(
@@ -78,7 +78,7 @@ class _DetailScreenState extends State<DetailScreen>
                   ],
                 ),
               ),
-              expandedHeight: imageHeight + textHeight,
+              expandedHeight: imageHeight + textHeight - safePadding,
               pinned: true,
               floating: true,
               elevation: 2.0,
