@@ -1,6 +1,5 @@
 import 'package:duration/duration.dart';
 import 'package:flutter/material.dart';
-import 'package:recipes/app.dart';
 
 enum RecipeType {
   curry,
@@ -13,6 +12,7 @@ enum RecipeType {
   dough,
   sides,
   desserts,
+  drinks,
 }
 
 extension RecipeTypeExtension on RecipeType {
@@ -46,7 +46,9 @@ extension RecipeTypeExtension on RecipeType {
         return "Vegetarian";
         break;
       case RecipeType.sides:
-        return "Sides";
+        return "Sides/Snacks";
+      case RecipeType.drinks:
+        return "Drinks";
     }
   }
 
@@ -85,6 +87,8 @@ extension RecipeTypeExtension on RecipeType {
         break;
       case RecipeType.sides:
         return Icons.restaurant;
+      case RecipeType.drinks:
+        return Icons.local_drink;
     }
   }
 }
