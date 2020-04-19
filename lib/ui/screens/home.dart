@@ -89,6 +89,7 @@ class HomeScreenState extends State<HomeScreen> {
     }
     var shortestSide = MediaQuery.of(context).size.width;
     final bool useMobileLayout = shortestSide < 600;
+    final bool useLargeLayout = shortestSide >= 1200;
     return Padding(
       // Padding before and after the list view:
       padding: const EdgeInsets.symmetric(vertical: 5.0),
@@ -100,10 +101,11 @@ class HomeScreenState extends State<HomeScreen> {
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (!snapshot.hasData) return _buildLoadingIndicator();
+                var documents = snapshot.data.documents.where((document) => ids == null || ids.contains(document.documentID)).toList();
                 return new StaggeredGridView.countBuilder(
-                  crossAxisCount: useMobileLayout ? 1 : 2,
+                  crossAxisCount: useMobileLayout ? 1 : useLargeLayout ? 3 : 2,
                   itemBuilder: (context, index) {
-                    var document = snapshot.data.documents[index];
+                    var document = documents[index];
                     return new RecipeCard(
                       recipe:
                           Recipe.fromMap(document.data, document.documentID),
@@ -112,7 +114,7 @@ class HomeScreenState extends State<HomeScreen> {
                       onFavoriteButtonPressed: _handleFavoritesListChanged,
                     );
                   },
-                  itemCount: snapshot.data.documents.length,
+                  itemCount: documents.length,
                   staggeredTileBuilder: (int index) =>
                       new StaggeredTile.fit(1),
                 );
