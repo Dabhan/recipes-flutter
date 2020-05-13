@@ -59,7 +59,7 @@ class _DetailScreenState extends State<DetailScreen>
     var safePadding = MediaQuery.of(context).padding.top;
 
     final imageHeight = shortestSide * (1 / RecipeImage.aspectRatio(context, true));
-    final textHeight = 130.0;
+    final textHeight = 150.0;
 
     return Scaffold(
       body: NestedScrollView(

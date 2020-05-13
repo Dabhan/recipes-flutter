@@ -98,6 +98,7 @@ class Recipe {
   final RecipeType type;
   final String name;
   final Duration duration;
+  final int serves;
   final List<String> ingredients;
   final List<String> preparation;
   final String imageURL;
@@ -107,6 +108,7 @@ class Recipe {
     this.type,
     this.name,
     this.duration,
+    this.serves,
     this.ingredients,
     this.preparation,
     this.imageURL,
@@ -120,6 +122,7 @@ class Recipe {
           type: typeFromString(data['type']),
           name: data['name'],
           duration: Duration(minutes: data['duration']),
+          serves: data['serves'],
           ingredients: new List<String>.from(data['ingredients']),
           preparation: new List<String>.from(data['preparation']),
           imageURL: data['image'],

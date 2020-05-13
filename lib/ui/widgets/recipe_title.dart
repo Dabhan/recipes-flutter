@@ -35,6 +35,17 @@ class RecipeTitle extends StatelessWidget {
               ),
             ],
           ),
+          Row(
+            children: [
+              Icon(Icons.people, size: 20.0),
+              SizedBox(width: 5.0),
+              AutoSizeText(
+                "${recipe.serves}",
+                maxLines: 1,
+                style: Theme.of(context).textTheme.caption,
+              ),
+            ],
+          ),
         ],
       ),
     );
