@@ -9,10 +9,10 @@ enum RecipeType {
   fish,
   vegetarian,
   porkandlamb,
+  spanish,
   dough,
   sides,
   desserts,
-  drinks,
 }
 
 extension RecipeTypeExtension on RecipeType {
@@ -47,8 +47,8 @@ extension RecipeTypeExtension on RecipeType {
         break;
       case RecipeType.sides:
         return "Sides/Snacks";
-      case RecipeType.drinks:
-        return "Drinks";
+      case RecipeType.spanish:
+        return "Spanish";
     }
   }
 
@@ -87,8 +87,8 @@ extension RecipeTypeExtension on RecipeType {
         break;
       case RecipeType.sides:
         return Icons.restaurant;
-      case RecipeType.drinks:
-        return Icons.local_drink;
+      case RecipeType.spanish:
+        return Icons.restaurant;
     }
   }
 }
@@ -159,7 +159,7 @@ class Recipe {
       case "sides":
         return RecipeType.sides;
       case "drinks":
-        return RecipeType.drinks;
+        return RecipeType.spanish;
       default:
         throw Exception("unknown recipe type");
     }

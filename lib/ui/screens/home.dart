@@ -32,8 +32,8 @@ class HomeScreenState extends State<HomeScreen> {
             isScrollable: true,
             labelColor: Theme.of(context).indicatorColor,
             tabs: [
-              ..._recipeTabs(_iconSize),
               Tab(icon: Icon(Icons.favorite, size: _iconSize)),
+              ..._recipeTabs(_iconSize),
               Tab(icon: Icon(Icons.settings, size: _iconSize)),
             ],
           ),
@@ -129,8 +129,8 @@ class HomeScreenState extends State<HomeScreen> {
   TabBarView _buildTabsContent() {
     return TabBarView(
       children: [
-        ..._buildRecipePages(),
         _buildRecipes(ids: appState.favourites),
+        ..._buildRecipePages(),
         _buildSettings(),
       ],
     );
