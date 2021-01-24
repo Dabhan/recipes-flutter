@@ -1,0 +1,117 @@
+#The name of your workflow.
+name:  master
+# Trigger the workflow on push to master
+on:
+  push:
+    branches:
+      - master
+#A workflow run is made up of one or more jobs. Jobs run in parallel by default.
+jobs:
+  build_id:
+    runs-on: macos-latest
+    steps:
+      - name: Generate build number
+        uses: einaregilsson/build-number@v2 
+        with:
+          token: ${{secrets.github_token}}        
+      - name: Print new build number
+        run: echo "Build number is $BUILD_NUMBER"
+      - name: Upload build number
+        uses: actions/upload-artifact@v1
+        with:
+          name: BUILD_NUMBER
+          path: BUILD_NUMBER
+
+  build_android_release:
+    #if conditional to prevent a job from r
+    runs-on: macos-latest
+    #Identifies any jobs that must complete successfully before this job will run.
+    needs: [build_id]
+    name: Build appbundle for Android
+    steps:
+      - uses: actions/checkout@v1
+      - name: Download build number
+        uses: actions/download-artifact@v1
+        with:
+          name: BUILD_NUMBER
+      - name: Restore build number
+        id: buildnumber
+        uses: einaregilsson/build-number@v2
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '1.12.14'
+          channel: 'dev'
+      # This action sets up a java environment
+      # https://github.com/actions/setup-java
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+      - run: flutter pub get
+      # build Android version
+      - name: Decrypt signing key and firebase config
+        run: ./.github/scripts/decrypt_secret_android.sh
+        env:
+          ANDROID_GOOGLE_JSON_ENCRYPTION_SECRET: ${{ secrets.ANDROID_GOOGLE_JSON_ENCRYPTION_SECRET }}
+      - name: Move decrypted files to their correct locations
+        run: mv $HOME/secrets/google-services.json $GITHUB_WORKSPACE/android/app/google-services.json
+      - name: Build Android app
+        run: flutter build appbundle --release --target-platform android-arm,android-arm64,android-x64 --build-number=${{ steps.buildnumber.outputs.build_number }}
+      - name: upload artifact to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{secrets.FIREBASE_ANDROID_APP_ID}}
+          token: ${{secrets.FIREBASE_TOKEN}}
+          groups: testers
+          file: app/build/outputs/apk/release/app-release-unsigned.apk
+
+  build_ios_release:
+    #if conditional to prevent a job from running
+    runs-on: macos-latest
+    #Identifies any jobs that must complete successfully before this job will run.
+    needs: [build_id]
+    name: Build .ipa for iOS
+    steps:
+      - uses: actions/checkout@v1
+      # restore the build id
+      - name: Download build number
+        uses: actions/download-artifact@v1
+        with:
+          name: BUILD_NUMBER
+      - name: Restore build number
+        id: buildnumber
+        uses: einaregilsson/build-number@v2
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '1.12.14'
+          channel: 'dev'
+      - run: flutter pub get
+      # setup encrypted files
+      - name: Decrypt  firebase config
+        run: ./.github/scripts/decrypt_secret_ios.sh
+        env:
+          IOS_GOOGLE_PLIST_ENCRYPTION_SECRET: ${{ secrets.IOS_GOOGLE_PLIST_ENCRYPTION_SECRET }}
+      - name: Move decrypted files to their correct locations
+        run: |
+          mv $HOME/secrets/GoogleService-Info.plist $GITHUB_WORKSPACE/ios/Runner/GoogleService-Info.plist
+      # build iOS version
+      - name: Build Unsigned iOS App
+        run: flutter build ios --release --no-codesign --build-number=${{ steps.buildnumber.outputs.build_number }}
+      - name: Sign iOS App
+        uses: maierj/fastlane-action@v1.2.0
+        env:
+          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTH }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+        with:
+          # The lane that should be executed.
+          lane: build
+          # The relative path from the project root directory to the subdirectory where the fastlane folder is located.
+          subdirectory: ios
+          # The action tracks usage in Firebase by default. You can disable tracking by setting this parameter to 'true'.
+          skip-tracking: true
+      - name: upload artifact to Firebase App Distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1
+        with:
+          appId: ${{secrets.FIREBASE_IOS_APP_ID}}
+          token: ${{secrets.FIREBASE_TOKEN}}
+          groups: testers
+          file: ios/Runner.ipa
