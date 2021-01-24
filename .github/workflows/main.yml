@@ -7,36 +7,12 @@ on:
       - master
 #A workflow run is made up of one or more jobs. Jobs run in parallel by default.
 jobs:
-  build_id:
-    runs-on: macos-latest
-    steps:
-      - name: Generate build number
-        uses: einaregilsson/build-number@v2 
-        with:
-          token: ${{secrets.github_token}}        
-      - name: Print new build number
-        run: echo "Build number is $BUILD_NUMBER"
-      - name: Upload build number
-        uses: actions/upload-artifact@v1
-        with:
-          name: BUILD_NUMBER
-          path: BUILD_NUMBER
-
   build_android_release:
     #if conditional to prevent a job from r
     runs-on: macos-latest
-    #Identifies any jobs that must complete successfully before this job will run.
-    needs: [build_id]
     name: Build appbundle for Android
     steps:
       - uses: actions/checkout@v1
-      - name: Download build number
-        uses: actions/download-artifact@v1
-        with:
-          name: BUILD_NUMBER
-      - name: Restore build number
-        id: buildnumber
-        uses: einaregilsson/build-number@v2
       - uses: subosito/flutter-action@v1
         with:
           flutter-version: '1.12.14'
@@ -55,7 +31,7 @@ jobs:
       - name: Move decrypted files to their correct locations
         run: mv $HOME/secrets/google-services.json $GITHUB_WORKSPACE/android/app/google-services.json
       - name: Build Android app
-        run: flutter build appbundle --release --target-platform android-arm,android-arm64,android-x64 --build-number=${{ steps.buildnumber.outputs.build_number }}
+        run: flutter build appbundle --release --target-platform android-arm,android-arm64,android-x64 --build-number=$GITHUB_RUN_ID
       - name: upload artifact to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
@@ -68,18 +44,9 @@ jobs:
     #if conditional to prevent a job from running
     runs-on: macos-latest
     #Identifies any jobs that must complete successfully before this job will run.
-    needs: [build_id]
     name: Build .ipa for iOS
     steps:
       - uses: actions/checkout@v1
-      # restore the build id
-      - name: Download build number
-        uses: actions/download-artifact@v1
-        with:
-          name: BUILD_NUMBER
-      - name: Restore build number
-        id: buildnumber
-        uses: einaregilsson/build-number@v2
       - uses: subosito/flutter-action@v1
         with:
           flutter-version: '1.12.14'
@@ -95,7 +62,7 @@ jobs:
           mv $HOME/secrets/GoogleService-Info.plist $GITHUB_WORKSPACE/ios/Runner/GoogleService-Info.plist
       # build iOS version
       - name: Build Unsigned iOS App
-        run: flutter build ios --release --no-codesign --build-number=${{ steps.buildnumber.outputs.build_number }}
+        run: flutter build ios --release --no-codesign --build-number=$GITHUB_RUN_ID
       - name: Sign iOS App
         uses: maierj/fastlane-action@v1.2.0
         env:
