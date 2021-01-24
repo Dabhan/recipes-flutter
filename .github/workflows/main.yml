@@ -36,8 +36,8 @@ jobs:
         with:
           appId: ${{secrets.FIREBASE_ANDROID_APP_ID}}
           token: ${{secrets.FIREBASE_TOKEN}}
-          groups: android-testers
-          file: build/app/outputs/flutter-apk/1app-release.apk
+          groups: androidtesters
+          file: build/app/outputs/flutter-apk/app-release.apk
   
   build_ios_release:
     #if conditional to prevent a job from running
@@ -57,7 +57,7 @@ jobs:
           IOS_GOOGLE_PLIST_ENCRYPTION_SECRET: ${{ secrets.IOS_GOOGLE_PLIST_ENCRYPTION_SECRET }}
       - name: Move decrypted files to their correct locations
         run: |
-          mv $HOME/secrets/GoogleService-Info.plist $GITHUB_WORKSPACE/ios/Runner/GoogleService-Info.plist
+          mv $HOME/secrets/GoogleService-Info.plist $GITHUB_WORKSPACE/ios/Runner/ios/GoogleService-Info.plist
       # build iOS version
       - name: Build Unsigned iOS App
         run: flutter build ios --release --no-codesign --build-number=$GITHUB_RUN_ID
