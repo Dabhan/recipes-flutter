@@ -30,14 +30,14 @@ jobs:
       - name: Move decrypted files to their correct locations
         run: mv $HOME/secrets/google-services.json $GITHUB_WORKSPACE/android/app/google-services.json
       - name: Build Android app
-        run: flutter build appbundle --release --target-platform android-arm,android-arm64,android-x64 --build-number=$GITHUB_RUN_ID
+        run: flutter build apk --release --target-platform android-arm,android-arm64,android-x64 --build-number=$GITHUB_RUN_ID
       - name: upload artifact to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
           appId: ${{secrets.FIREBASE_ANDROID_APP_ID}}
           token: ${{secrets.FIREBASE_TOKEN}}
           groups: testers
-          file: app/build/outputs/apk/release/app-release-unsigned.apk
+          file: build/app/outputs/flutter-apk/app-release.apk
   
   build_ios_release:
     #if conditional to prevent a job from running
