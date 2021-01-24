@@ -2,7 +2,7 @@ git_url("https://gitlab.com/dabhan/recipes-signing.git")
 
 storage_mode("git")
 
-type("adhoc") # The default type, can be: appstore, adhoc, enterprise or development
+type("ad-hoc") # The default type, can be: appstore, adhoc, enterprise or development
 
 # app_identifier(["tools.fastlane.app", "tools.fastlane.app2"])
 # username("user@fastlane.tools") # Your Apple Developer Portal username
