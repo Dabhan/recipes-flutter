@@ -73,10 +73,25 @@ jobs:
           subdirectory: ios
           # The action tracks usage in Firebase by default. You can disable tracking by setting this parameter to 'true'.
           skip-tracking: true
+      - name: Upload build artifact to deploy using linux
+        uses: actions/upload-artifact@v2
+        with:
+          name: ios-app-release
+          path: ios/Runner.ipa
+  deploy_ios_release:
+    #if conditional to prevent a job from r
+    runs-on: ubuntu-latest
+    name:  Deploy ipa for iOS to firebase
+    needs: build_ios_release
+    steps:
+      - name: Download iOS artifact to deploy to firebase
+        uses: actions/download-artifact@v2
+        with:
+          name: ios-app-release
       - name: upload artifact to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
           appId: ${{secrets.FIREBASE_IOS_APP_ID}}
           token: ${{secrets.FIREBASE_TOKEN}}
-          groups: testers
-          file: ios/Runner.ipa
+          groups: iostesters
+          file: Runner.ipa
