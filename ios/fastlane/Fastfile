@@ -27,7 +27,7 @@ platform :ios do
       build_ios_app(
         workspace: "Runner.xcworkspace", 
         scheme: "Runner", 
-        export_method: "adhoc"
+        export_method: "ad-hoc"
       )
   end
 end
