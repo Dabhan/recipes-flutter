@@ -308,9 +308,9 @@ PODS:
   - path_provider (0.0.1):
     - Flutter
   - PromisesObjC (1.2.8)
-  - sqflite (0.0.1):
+  - sqflite (0.0.2):
     - Flutter
-    - FMDB (~> 2.7.2)
+    - FMDB (>= 2.7.5)
 
 DEPENDENCIES:
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
@@ -372,7 +372,7 @@ SPEC CHECKSUMS:
   cloud_firestore: 4cc700e236ebfe2d5d980e49cb066d202cfee0e9
   Firebase: 32f9520684e87c7af3f0704f7f88042626d6b536
   firebase_auth: af8784c4d8d87c36f730a305f97bfbcb24db024b
-  firebase_core: 0d8be0e0d14c4902953aeb5ac5d7316d1fe4b978
+  firebase_core: 335c02abd48672b7c83c683df833d0488a72e73e
   FirebaseAnalytics: 83f822fd0d33a46f49f89b8c3ab16ab4d89df08a
   FirebaseAuth: a6da11d78dfd956b7f7af3222a0f0b1c93ef8fc9
   FirebaseAuthInterop: a0f37ae05833af156e72028f648d313f7e7592e9
@@ -395,9 +395,9 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: cea130bbfe5a7edc8d06d3f0d17288c32ffe9925
   leveldb-library: 55d93ee664b4007aac644a782d11da33fba316f7
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
-  path_provider: fb74bd0465e96b594bb3b5088ee4a4e7bb1f2a9d
+  path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   PromisesObjC: c119f3cd559f50b7ae681fa59dc1acd19173b7e6
-  sqflite: 4001a31ff81d210346b500c55b17f4d6c7589dd0
+  sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
 
 PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
 
