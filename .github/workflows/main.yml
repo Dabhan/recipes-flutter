@@ -10,7 +10,7 @@ jobs:
   build_android_release:
     #if conditional to prevent a job from r
     runs-on: ubuntu-latest
-    name: Build appbundle for Android
+    name: Build and deploy apk for Android
     steps:
       - uses: actions/checkout@v1
       - uses: subosito/flutter-action@v1
@@ -36,8 +36,8 @@ jobs:
         with:
           appId: ${{secrets.FIREBASE_ANDROID_APP_ID}}
           token: ${{secrets.FIREBASE_TOKEN}}
-          groups: testers
-          file: build/app/outputs/flutter-apk/app-release.apk
+          groups: android-testers
+          file: build/app/outputs/flutter-apk/1app-release.apk
   
   build_ios_release:
     #if conditional to prevent a job from running
