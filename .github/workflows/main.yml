@@ -26,9 +26,14 @@ jobs:
       - name: Decrypt signing key and firebase config
         run: ./.github/scripts/decrypt_secret_android.sh
         env:
+          ANDROID_DEPLOY_KEY_SECRET_PASSPHRASE: ${{ secrets.ANDROID_DEPLOY_KEY_SECRET_PASSPHRASE }}
+          KEY_PROPERTIES_SECRET_PASSPHRASE: ${{ secrets.KEY_PROPERTIES_SECRET_PASSPHRASE }}
           ANDROID_GOOGLE_JSON_ENCRYPTION_SECRET: ${{ secrets.ANDROID_GOOGLE_JSON_ENCRYPTION_SECRET }}
       - name: Move decrypted files to their correct locations
-        run: mv $HOME/secrets/google-services.json $GITHUB_WORKSPACE/android/app/google-services.json
+        run: |
+          mv $HOME/secrets/key.jks $GITHUB_WORKSPACE/android/app/key.jks
+          mv $HOME/secrets/key.properties $GITHUB_WORKSPACE/android/key.properties
+          mv $HOME/secrets/google-services.json $GITHUB_WORKSPACE/android/app/google-services.json
       - name: Build Android app
         run: flutter build apk --release --target-platform android-arm,android-arm64,android-x64 --build-number=$GITHUB_RUN_ID
       - name: upload artifact to Firebase App Distribution
