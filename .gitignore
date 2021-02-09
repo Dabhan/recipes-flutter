@@ -224,3 +224,6 @@ fabric.properties
 ## Google services credentials
 GoogleService-Info.plist
 google-services.json
+
+key.properties
+key.jks
