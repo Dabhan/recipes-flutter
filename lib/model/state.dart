@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class StateModel {
   bool isLoading;
-  FirebaseUser user;
+  User user;
   List<String> favourites;
 
   StateModel({

@@ -20,8 +20,7 @@ class StateWidget extends StatefulWidget {
   // Returns data of the nearest widget _StateDataWidget
   // in the widget tree.
   static _StateWidgetState of(BuildContext context) {
-    return (context.inheritFromWidgetOfExactType(_StateDataWidget)
-            as _StateDataWidget)
+    return (context.dependOnInheritedWidgetOfExactType<_StateDataWidget>())
         .data;
   }
 
@@ -47,7 +46,7 @@ class _StateWidgetState extends State<StateWidget> {
 
   Future<Null> initUser() async {
     googleAccount = await getSignedInAccount(googleSignIn);
-    
+
     if (googleAccount == null) {
       setState(() {
         state.isLoading = false;
@@ -62,7 +61,7 @@ class _StateWidgetState extends State<StateWidget> {
       // Start the sign-in process:
       googleAccount = await googleSignIn.signIn();
     }
-    FirebaseUser firebaseUser = await signIntoFirebase(googleAccount);
+    User firebaseUser = await signIntoFirebase(googleAccount);
     state.user = firebaseUser; // new
     List<String> favourites = await getFavourites(); // new
     setState(() {
@@ -79,18 +78,16 @@ class _StateWidgetState extends State<StateWidget> {
     });
   }
 
-  
-
   Future<List<String>> getFavourites() async {
-    DocumentSnapshot querySnapshot = await Firestore.instance
+    DocumentSnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('users')
-        .document(state.user.uid)
+        .doc(state.user.uid)
         .get();
     if (querySnapshot.exists &&
-        querySnapshot.data.containsKey('favorites') &&
-        querySnapshot.data['favorites'] is List) {
+        querySnapshot.data().containsKey('favorites') &&
+        querySnapshot.data()['favorites'] is List) {
       // Create a new List<String> from List<dynamic>
-      return List<String>.from(querySnapshot.data['favorites']);
+      return List<String>.from(querySnapshot.data()['favorites']);
     }
     return [];
   }
@@ -118,7 +115,3 @@ class _StateDataWidget extends InheritedWidget {
   @override
   bool updateShouldNotify(_StateDataWidget old) => true;
 }
-
-
-
-

@@ -76,7 +76,7 @@ class HomeScreenState extends State<HomeScreen> {
 
   Padding _buildRecipes({RecipeType recipeType, List<String> ids}) {
     CollectionReference collectionReference =
-        Firestore.instance.collection('recipes');
+        FirebaseFirestore.instance.collection('recipes');
     Stream<QuerySnapshot> stream;
     // The argument recipeType is set
     if (recipeType != null) {
@@ -101,22 +101,26 @@ class HomeScreenState extends State<HomeScreen> {
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (!snapshot.hasData) return _buildLoadingIndicator();
-                var documents = snapshot.data.documents.where((document) => ids == null || ids.contains(document.documentID)).toList();
+                var documents = snapshot.data.docs
+                    .where(
+                        (document) => ids == null || ids.contains(document.id))
+                    .toList();
                 return new StaggeredGridView.countBuilder(
-                  crossAxisCount: useMobileLayout ? 1 : useLargeLayout ? 3 : 2,
+                  crossAxisCount: useMobileLayout
+                      ? 1
+                      : useLargeLayout
+                          ? 3
+                          : 2,
                   itemBuilder: (context, index) {
                     var document = documents[index];
                     return new RecipeCard(
-                      recipe:
-                          Recipe.fromMap(document.data, document.documentID),
-                      inFavorites:
-                          appState.favourites.contains(document.documentID),
+                      recipe: Recipe.fromMap(document.data(), document.id),
+                      inFavorites: appState.favourites.contains(document.id),
                       onFavoriteButtonPressed: _handleFavoritesListChanged,
                     );
                   },
                   itemCount: documents.length,
-                  staggeredTileBuilder: (int index) =>
-                      new StaggeredTile.fit(1),
+                  staggeredTileBuilder: (int index) => new StaggeredTile.fit(1),
                 );
               },
             ),

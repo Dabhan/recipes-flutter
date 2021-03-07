@@ -5,7 +5,7 @@ Future<GoogleSignInAccount> getSignedInAccount(
     GoogleSignIn googleSignIn) async {
   // Is the user already signed in?
   GoogleSignInAccount account = googleSignIn.currentUser;
-  
+
   // Try to sign in the previous user:
   if (account != null && account.id == null) {
     await googleSignIn.disconnect();
@@ -18,18 +18,16 @@ Future<GoogleSignInAccount> getSignedInAccount(
         await googleSignIn.disconnect();
         account = null;
       }
-    } catch (exception) {
-    }
+    } catch (exception) {}
   }
   return account;
 }
 
-Future<FirebaseUser> signIntoFirebase(
-    GoogleSignInAccount googleSignInAccount) async {
+Future<User> signIntoFirebase(GoogleSignInAccount googleSignInAccount) async {
   FirebaseAuth _auth = FirebaseAuth.instance;
   GoogleSignInAuthentication googleAuth =
       await googleSignInAccount.authentication;
-  final AuthCredential credential = GoogleAuthProvider.getCredential(
+  final AuthCredential credential = GoogleAuthProvider.credential(
     accessToken: googleAuth.accessToken,
     idToken: googleAuth.idToken,
   );
@@ -37,7 +35,7 @@ Future<FirebaseUser> signIntoFirebase(
   return result.user;
 }
 
-Future<void> signOutFirebase (GoogleSignIn googleSignIn) async{
+Future<void> signOutFirebase(GoogleSignIn googleSignIn) async {
   await googleSignIn.signOut();
   FirebaseAuth _auth = FirebaseAuth.instance;
   await _auth.signOut();
