@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Build and deploy apk for Android
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - uses: subosito/flutter-action@v1
         with:
           flutter-version: '2.0.1'
@@ -41,7 +41,7 @@ jobs:
         with:
           appId: ${{secrets.FIREBASE_ANDROID_APP_ID}}
           token: ${{secrets.FIREBASE_TOKEN}}
-          groups: androidtesters
+          groups: androidinternaltesters
           file: build/app/outputs/flutter-apk/app-release.apk
   
   build_ios_release:
@@ -50,13 +50,13 @@ jobs:
     #Identifies any jobs that must complete successfully before this job will run.
     name: Build .ipa for iOS
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - uses: subosito/flutter-action@v1
         with:
           flutter-version: '2.0.1'
       - run: flutter pub get
       # setup encrypted files
-      - name: Decrypt  firebase config
+      - name: Decrypt firebase config
         run: ./.github/scripts/decrypt_secret_ios.sh
         env:
           IOS_GOOGLE_PLIST_ENCRYPTION_SECRET: ${{ secrets.IOS_GOOGLE_PLIST_ENCRYPTION_SECRET }}
@@ -84,7 +84,6 @@ jobs:
           name: ios-app-release
           path: ios/Runner.ipa
   deploy_ios_release:
-    #if conditional to prevent a job from r
     runs-on: ubuntu-latest
     name:  Deploy ipa for iOS to firebase
     needs: build_ios_release
@@ -100,3 +99,17 @@ jobs:
           token: ${{secrets.FIREBASE_TOKEN}}
           groups: iostesters
           file: Runner.ipa
+  deploy_web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '2.0.1'
+      - run: flutter pub get && flutter build web
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_RECIPES_8957C }}"
+          projectId: recipes-8957c
+          channelId: live
