@@ -227,3 +227,6 @@ google-services.json
 
 key.properties
 key.jks
+
+node_modules
+service-account.json
