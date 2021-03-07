@@ -11,6 +11,13 @@
         "source": "**",
         "destination": "/index.html"
       }
-    ]
+    ],
+    "headers": [ {
+      "source": "**/*.@(jpg|jpeg|JPG|gif|png).*",
+      "headers": [ {
+        "key": "Access-Control-Allow-Origin",
+        "value": "*"
+      } ]
+    } ]  
   }
 }

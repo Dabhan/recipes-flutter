@@ -41,7 +41,7 @@ jobs:
         with:
           appId: ${{secrets.FIREBASE_ANDROID_APP_ID}}
           token: ${{secrets.FIREBASE_TOKEN}}
-          groups: androidinternaltesters
+          groups: internaltesters
           file: build/app/outputs/flutter-apk/app-release.apk
   
   build_ios_release:
@@ -100,6 +100,7 @@ jobs:
           groups: iostesters
           file: Runner.ipa
   deploy_web:
+    name: Build and deploy website
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
