@@ -90,7 +90,7 @@ extension RecipeTypeExtension on RecipeType {
 
 class Recipe {
   final String id;
-  final RecipeType type;
+  final List<RecipeType> types;
   final String name;
   final Duration duration;
   final int serves;
@@ -100,7 +100,7 @@ class Recipe {
 
   const Recipe({
     this.id,
-    this.type,
+    this.types,
     this.name,
     this.duration,
     this.serves,
@@ -114,7 +114,7 @@ class Recipe {
   Recipe.fromMap(Map<String, dynamic> data, String id)
       : this(
           id: id,
-          type: typeFromString(data['type']),
+          types: (data['types'] as List<dynamic>).map((e) => typeFromString(e)).toList(),
           name: data['name'],
           duration: Duration(minutes: data['duration']),
           serves: data['serves'],

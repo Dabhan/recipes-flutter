@@ -81,7 +81,7 @@ class HomeScreenState extends State<HomeScreen> {
     // The argument recipeType is set
     if (recipeType != null) {
       stream = collectionReference
-          .where("type", isEqualTo: recipeType.typeName)
+          .where("types", arrayContains: recipeType.typeName)
           .snapshots();
     } else {
       // Use snapshots of all recipes if recipeType has not been passed
