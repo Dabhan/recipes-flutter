@@ -5,8 +5,6 @@ import 'package:recipes/ui/screens/detail.dart';
 import 'package:recipes/ui/widgets/recipe_image.dart';
 import 'package:recipes/ui/widgets/recipe_title.dart';
 
-
-
 class RecipeCard extends StatelessWidget {
   final Recipe recipe;
   final bool inFavorites;
@@ -27,7 +25,7 @@ class RecipeCard extends StatelessWidget {
           // Conditional expression:
           // show "favorite" icon or "favorite border" icon depending on widget.inFavorites:
           inFavorites == true ? Icons.favorite : Icons.favorite_border,
-          color: Theme.of(context).accentColor,
+          color: Theme.of(context).colorScheme.secondary,
         ),
         elevation: 2.0,
         fillColor: Colors.white,
@@ -37,11 +35,11 @@ class RecipeCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => new DetailScreen(recipe, inFavorites),
-            ),
-          ),
+        context,
+        MaterialPageRoute(
+          builder: (context) => new DetailScreen(recipe, inFavorites),
+        ),
+      ),
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
         child: Card(

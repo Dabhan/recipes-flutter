@@ -79,7 +79,7 @@ class _StateWidgetState extends State<StateWidget> {
   }
 
   Future<List<String>> getFavourites() async {
-    DocumentSnapshot querySnapshot = await FirebaseFirestore.instance
+    DocumentSnapshot<Map> querySnapshot = await FirebaseFirestore.instance
         .collection('users')
         .doc(state.user.uid)
         .get();

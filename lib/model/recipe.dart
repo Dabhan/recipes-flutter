@@ -46,6 +46,8 @@ extension RecipeTypeExtension on RecipeType {
         break;
       case RecipeType.sides:
         return "Sides/Snacks";
+      default:
+        throw Exception("Unknown type");
     }
   }
 
@@ -84,6 +86,8 @@ extension RecipeTypeExtension on RecipeType {
         break;
       case RecipeType.sides:
         return Icons.restaurant;
+      default:
+        throw Exception("Unknown type");
     }
   }
 }
@@ -114,7 +118,9 @@ class Recipe {
   Recipe.fromMap(Map<String, dynamic> data, String id)
       : this(
           id: id,
-          types: (data['types'] as List<dynamic>).map((e) => typeFromString(e)).toList(),
+          types: (data['types'] as List<dynamic>)
+              .map((e) => typeFromString(e))
+              .toList(),
           name: data['name'],
           duration: Duration(minutes: data['duration']),
           serves: data['serves'],

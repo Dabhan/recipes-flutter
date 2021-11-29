@@ -9,7 +9,8 @@ class LoginScreen extends StatelessWidget {
     BoxDecoration _buildBackground() {
       return BoxDecoration(
         image: DecorationImage(
-          image: AssetImage("assets/images/brooke-lark-wMzx2nBdeng-unsplash.jpg"),
+          image:
+              AssetImage("assets/images/brooke-lark-wMzx2nBdeng-unsplash.jpg"),
           fit: BoxFit.cover,
         ),
       );
@@ -18,7 +19,7 @@ class LoginScreen extends StatelessWidget {
     Text _buildText() {
       return Text(
         'Recipes',
-        style: Theme.of(context).textTheme.headline,
+        style: Theme.of(context).textTheme.headline1,
         textAlign: TextAlign.center,
       );
     }
@@ -42,5 +43,5 @@ class LoginScreen extends StatelessWidget {
         ),
       ),
     );
-}
+  }
 }

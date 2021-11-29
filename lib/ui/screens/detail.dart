@@ -45,7 +45,7 @@ class _DetailScreenState extends State<DetailScreen>
       _inFavorites = !_inFavorites;
       if (_inFavorites) {
         appState.favourites.add(widget.recipe.id);
-      }else {
+      } else {
         appState.favourites.remove(widget.recipe.id);
       }
     });
@@ -58,7 +58,8 @@ class _DetailScreenState extends State<DetailScreen>
     var shortestSide = MediaQuery.of(context).size.width;
     var safePadding = MediaQuery.of(context).padding.top;
 
-    final imageHeight = shortestSide * (1 / RecipeImage.aspectRatio(context, true));
+    final imageHeight =
+        shortestSide * (1 / RecipeImage.aspectRatio(context, true));
     final textHeight = 150.0;
 
     return Scaffold(
@@ -126,13 +127,15 @@ class IngredientsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> children = new List<Widget>();
+    List<Widget> children = <Widget>[];
     ingredients.forEach((item) {
       children.add(
         new Row(
           children: <Widget>[
             new SizedBox(width: 5.0),
-            Flexible (child:new Text(item, style: Theme.of(context).textTheme.subhead)),
+            Flexible(
+                child: new Text(item,
+                    style: Theme.of(context).textTheme.subtitle1)),
           ],
         ),
       );
@@ -157,17 +160,17 @@ class PreparationView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> textElements = List<Widget>();
+    List<Widget> textElements = <Widget>[];
     preparationSteps.asMap().forEach((index, item) {
-      textElements.add(
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children:[
-          Text("${index + 1}."),
-          SizedBox(width: 10.0,),
-          Flexible(child:Text(item, style: Theme.of(context).textTheme.subhead)),
-        ])
-      );
+      textElements
+          .add(Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Text("${index + 1}."),
+        SizedBox(
+          width: 10.0,
+        ),
+        Flexible(
+            child: Text(item, style: Theme.of(context).textTheme.subtitle1)),
+      ]));
       // Add spacing between the lines:
       textElements.add(
         SizedBox(
