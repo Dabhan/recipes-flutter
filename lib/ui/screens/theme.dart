@@ -1,5 +1,7 @@
-import 'package:flutter/foundation.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 ThemeData lightTheme() {
   // We're going to define all of our font styles
@@ -15,9 +17,8 @@ ThemeData lightTheme() {
   }
 
   // We want to override a default light blue theme.
-  final ThemeData base = ThemeData(
-      primaryColor:
-          defaultTargetPlatform == TargetPlatform.iOS ? Colors.white : null);
+  final ThemeData base =
+      ThemeData(primaryColor: Platform.isIOS ? Colors.white : null);
 
   // And apply changes on it:
   return base.copyWith(
@@ -45,15 +46,19 @@ ThemeData darkTheme() {
   }
 
   // We want to override a default light blue theme.
-  final ThemeData base = ThemeData(
-      primarySwatch: Colors.blue,
-      primaryColor:
-          defaultTargetPlatform == TargetPlatform.iOS ? Colors.grey[850] : null,
+  final ThemeData base = ThemeData.dark().copyWith(
+      primaryColor: Platform.isIOS ? Colors.grey[850] : null,
+      primaryColorDark: Platform.isIOS ? Colors.grey[850] : null,
+      primaryColorLight: Platform.isIOS ? Colors.grey[850] : null,
       brightness: Brightness.dark);
 
   // And apply changes on it:
   return base.copyWith(
       textTheme: _buildTextTheme(base.textTheme),
+      appBarTheme: AppBarTheme(
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
+        color: Colors.grey[850],
+      ),
       indicatorColor: Colors.white,
       backgroundColor: Colors.black,
       tabBarTheme: base.tabBarTheme.copyWith(
