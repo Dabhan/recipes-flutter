@@ -46,7 +46,7 @@ jobs:
   
   build_ios_release:
     #if conditional to prevent a job from running
-    runs-on: macos-latest
+    runs-on: macos-11
     #Identifies any jobs that must complete successfully before this job will run.
     name: Build .ipa for iOS
     steps:
