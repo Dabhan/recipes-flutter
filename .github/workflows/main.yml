@@ -65,7 +65,9 @@ jobs:
           mv $HOME/secrets/GoogleService-Info.plist $GITHUB_WORKSPACE/ios/GoogleService-Info.plist
       # build iOS version
       - name: Build Unsigned iOS App
-        run: flutter build ios --release --no-codesign --build-number=$GITHUB_RUN_ID
+        run: |
+          pod repo update
+          flutter build ios --release --no-codesign --build-number=$GITHUB_RUN_ID
       - name: Sign iOS App
         uses: maierj/fastlane-action@v1.2.0
         env:
