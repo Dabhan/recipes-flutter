@@ -12,13 +12,17 @@ class RecipeImage extends StatelessWidget {
   static double aspectRatio(BuildContext context, bool detail) {
     var shortestSide = MediaQuery.of(context).size.width;
     final bool useMobileLayout = shortestSide < 600;
-    
-    return 16.0 / (useMobileLayout ? 9.0 : detail ? 4.0 : 9.0);
+
+    return 16.0 /
+        (useMobileLayout
+            ? 9.0
+            : detail
+                ? 4.0
+                : 9.0);
   }
 
   @override
   Widget build(BuildContext context) {
-    
     final double ratio = RecipeImage.aspectRatio(context, detail);
     return AspectRatio(
         aspectRatio: ratio,
@@ -32,14 +36,11 @@ class RecipeImage extends StatelessWidget {
                 )
               : CachedNetworkImage(
                   imageUrl: imageURL,
-                  placeholder: (context, url) => Center(
-                      child: SizedBox(
-                          width: 40.0,
-                          height: 40.0,
-                          child: CircularProgressIndicator())),
+                  placeholder: (context, url) => Center(child: SizedBox(width: 40.0, height: 40.0, child: CircularProgressIndicator())),
                   errorWidget: (context, url, error) => Icon(Icons.error),
                   fit: BoxFit.cover,
                 ),
-        ));
+        ),
+    );
   }
 }

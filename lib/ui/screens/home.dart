@@ -90,35 +90,34 @@ class HomeScreenState extends State<HomeScreen> {
     return Padding(
       // Padding before and after the list view:
       padding: const EdgeInsets.symmetric(vertical: 5.0),
-      child: Column(
-        children: <Widget>[
-          Expanded(
-            child: new StreamBuilder(
-              stream: stream,
-              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (!snapshot.hasData) return _buildLoadingIndicator();
-                final documents = snapshot.data.docs.where((document) => ids == null || ids.contains(document.id)).toList();
+      child: StreamBuilder(
+        stream: stream,
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (!snapshot.hasData) return _buildLoadingIndicator();
+          final documents = snapshot.data.docs.where((document) => ids == null || ids.contains(document.id)).toList();
 
-                final children = documents.map<Widget>((document) => StaggeredGridTile.fit(
-                    crossAxisCellCount: 1,
-                    child: RecipeCard(
-                      recipe: Recipe.fromMap(document.data(), document.id),
-                      inFavorites: appState.favourites.contains(document.id),
-                      onFavoriteButtonPressed: _handleFavoritesListChanged,
-                    )));
+          final children = documents
+              .map<Widget>((document) => StaggeredGridTile.fit(
+                  crossAxisCellCount: 1,
+                  child: RecipeCard(
+                    recipe: Recipe.fromMap(document.data(), document.id),
+                    inFavorites: appState.favourites.contains(document.id),
+                    onFavoriteButtonPressed: _handleFavoritesListChanged,
+                  )))
+              .toList();
 
-                return StaggeredGrid.count(
-                  crossAxisCount: useMobileLayout
-                      ? 1
-                      : useLargeLayout
-                          ? 3
-                          : 2,
-                  children: children,
-                );
-              },
+          return SingleChildScrollView(
+            child: StaggeredGrid.count(
+              axisDirection: AxisDirection.down,
+              crossAxisCount: useMobileLayout
+                  ? 1
+                  : useLargeLayout
+                      ? 3
+                      : 2,
+              children: children,
             ),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
