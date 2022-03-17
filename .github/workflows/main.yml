@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '2.5.3'
+          flutter-version: '2.10.3'
       # This action sets up a java environment
       # https://github.com/actions/setup-java
       - uses: actions/setup-java@v1
@@ -36,13 +36,13 @@ jobs:
           mv $HOME/secrets/google-services.json $GITHUB_WORKSPACE/android/app/google-services.json
       - name: Build Android app
         run: flutter build apk --release --target-platform android-arm,android-arm64,android-x64 --build-number=$GITHUB_RUN_ID
-      - name: upload artifact to Firebase App Distribution
-        uses: wzieba/Firebase-Distribution-Github-Action@v1
-        with:
-          appId: ${{secrets.FIREBASE_ANDROID_APP_ID}}
-          token: ${{secrets.FIREBASE_TOKEN}}
-          groups: androidtesters
-          file: build/app/outputs/flutter-apk/app-release.apk
+      # - name: upload artifact to Firebase App Distribution
+      #   uses: wzieba/Firebase-Distribution-Github-Action@v1
+      #   with:
+      #     appId: ${{secrets.FIREBASE_ANDROID_APP_ID}}
+      #     token: ${{secrets.FIREBASE_TOKEN}}
+      #     groups: androidtesters
+      #     file: build/app/outputs/flutter-apk/app-release.apk
   
   build_ios_release:
     #if conditional to prevent a job from running
@@ -53,7 +53,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '2.5.3'
+          flutter-version: '2.10.3'
       - run: flutter pub get
       # setup encrypted files
       - name: Decrypt firebase config
@@ -106,7 +106,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: subosito/flutter-action@v1
         with:
-          flutter-version: '2.5.3'
+          flutter-version: '2.10.3'
       - run: flutter pub get && flutter build web
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:

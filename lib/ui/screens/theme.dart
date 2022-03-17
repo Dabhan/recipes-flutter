@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -18,7 +19,7 @@ ThemeData lightTheme() {
 
   // We want to override a default light blue theme.
   final ThemeData base =
-      ThemeData(primaryColor: Platform.isIOS ? Colors.white : null);
+      ThemeData(primaryColor: !kIsWeb && Platform.isIOS ? Colors.white : null);
 
   // And apply changes on it:
   return base.copyWith(
@@ -47,9 +48,9 @@ ThemeData darkTheme() {
 
   // We want to override a default light blue theme.
   final ThemeData base = ThemeData.dark().copyWith(
-      primaryColor: Platform.isIOS ? Colors.grey[850] : null,
-      primaryColorDark: Platform.isIOS ? Colors.grey[850] : null,
-      primaryColorLight: Platform.isIOS ? Colors.grey[850] : null,
+      primaryColor: !kIsWeb && Platform.isIOS ? Colors.grey[850] : null,
+      primaryColorDark: !kIsWeb && Platform.isIOS ? Colors.grey[850] : null,
+      primaryColorLight: !kIsWeb && Platform.isIOS ? Colors.grey[850] : null,
       brightness: Brightness.dark);
 
   // And apply changes on it:

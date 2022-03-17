@@ -75,14 +75,11 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   Padding _buildRecipes({RecipeType recipeType, List<String> ids}) {
-    CollectionReference collectionReference =
-        FirebaseFirestore.instance.collection('recipes');
+    CollectionReference collectionReference = FirebaseFirestore.instance.collection('recipes');
     Stream<QuerySnapshot> stream;
     // The argument recipeType is set
     if (recipeType != null) {
-      stream = collectionReference
-          .where("types", arrayContains: recipeType.typeName)
-          .snapshots();
+      stream = collectionReference.where("types", arrayContains: recipeType.typeName).snapshots();
     } else {
       // Use snapshots of all recipes if recipeType has not been passed
       stream = collectionReference.snapshots();
@@ -98,29 +95,25 @@ class HomeScreenState extends State<HomeScreen> {
           Expanded(
             child: new StreamBuilder(
               stream: stream,
-              builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot> snapshot) {
+              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (!snapshot.hasData) return _buildLoadingIndicator();
-                var documents = snapshot.data.docs
-                    .where(
-                        (document) => ids == null || ids.contains(document.id))
-                    .toList();
-                return new StaggeredGridView.countBuilder(
+                final documents = snapshot.data.docs.where((document) => ids == null || ids.contains(document.id)).toList();
+
+                final children = documents.map<Widget>((document) => StaggeredGridTile.fit(
+                    crossAxisCellCount: 1,
+                    child: RecipeCard(
+                      recipe: Recipe.fromMap(document.data(), document.id),
+                      inFavorites: appState.favourites.contains(document.id),
+                      onFavoriteButtonPressed: _handleFavoritesListChanged,
+                    )));
+
+                return StaggeredGrid.count(
                   crossAxisCount: useMobileLayout
                       ? 1
                       : useLargeLayout
                           ? 3
                           : 2,
-                  itemBuilder: (context, index) {
-                    var document = documents[index];
-                    return new RecipeCard(
-                      recipe: Recipe.fromMap(document.data(), document.id),
-                      inFavorites: appState.favourites.contains(document.id),
-                      onFavoriteButtonPressed: _handleFavoritesListChanged,
-                    );
-                  },
-                  itemCount: documents.length,
-                  staggeredTileBuilder: (int index) => new StaggeredTile.fit(1),
+                  children: children,
                 );
               },
             ),
